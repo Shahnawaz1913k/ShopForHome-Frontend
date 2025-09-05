@@ -10,7 +10,7 @@ import { CartService } from './services/cart';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
+export class App {
   protected readonly title = signal('ShopForHome-Frontend');
 
   constructor(
@@ -18,9 +18,5 @@ export class App implements OnInit {
     private cartService: CartService
   ) {}
 
-  ngOnInit(): void {
-    if (this.authService.getToken()) {
-      this.cartService.loadCart();
-    }
-  }
+  
 }

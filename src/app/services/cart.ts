@@ -20,6 +20,17 @@ export class CartService {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+
+    if (this.isBrowser) {
+      const storedCart = localStorage.getItem('cart');
+      if (storedCart) {
+        this.cartItems.next(JSON.parse(storedCart));
+      }
+    }
+
+    if (this.isBrowser && this.authService.getToken()) {
+      this.loadCart();
+    }
   }
 
   private getAuthHeaders(): HttpHeaders {
@@ -30,49 +41,97 @@ export class CartService {
     });
   }
 
-  // Fetches the user's cart from the backend and broadcasts it
-  loadCart(): void {
-    if (!this.authService.getToken() || !this.isBrowser) {
-      return;
+  private updateCartAndStorage(items: any[]): void {
+    this.cartItems.next(items);
+    if (this.isBrowser) {
+      localStorage.setItem('cart', JSON.stringify(items));
     }
+  }
+  
+  loadCart(): void {
+    if (!this.authService.getToken() || !this.isBrowser) { return; }
+    
     const headers = this.getAuthHeaders()
       .set('Cache-Control', 'no-cache')
       .set('Pragma', 'no-cache');
 
     this.http.get<any[]>(this.apiUrl, { headers: headers })
       .subscribe(items => {
-        this.cartItems.next(items);
+        this.updateCartAndStorage(items);
       });
   }
 
-  // Adds an item to the cart via the backend
   addToCart(product: any): void {
+    const currentItems = this.cartItems.getValue();
+    const existingItem = currentItems.find(item => item.productId === product.id);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      const newItem = {
+        productId: product.id,
+        productName: product.name,
+        price: product.price,
+        quantity: 1
+      };
+      currentItems.push(newItem);
+    }
+    this.updateCartAndStorage(currentItems);
+
     const payload = { productId: product.id, quantity: 1 };
     this.http.post(`${this.apiUrl}/add`, payload, { headers: this.getAuthHeaders() })
-      .subscribe(() => {
-        this.loadCart(); // Refresh the cart from the backend after adding
+      .subscribe({
+        error: (err) => {
+          console.error("Backend sync failed for addToCart:", err);
+          this.loadCart();
+        }
       });
   }
 
-  // Updates the quantity of an item
   updateQuantity(productId: number, quantity: number): void {
+    const currentItems = this.cartItems.getValue();
+    const itemToUpdate = currentItems.find(i => i.productId === productId);
+
+    if (!itemToUpdate) return;
+    
+    if (quantity > 0) {
+        itemToUpdate.quantity = quantity;
+        this.updateCartAndStorage(currentItems);
+    } else {
+        this.removeFromCart(productId);
+        return;
+    }
+    
     const payload = { productId, quantity };
     this.http.post(`${this.apiUrl}/update-quantity`, payload, { headers: this.getAuthHeaders() })
-        .subscribe(() => this.loadCart());
+        .subscribe({
+          error: (err) => {
+            console.error("Backend sync failed for updateQuantity:", err);
+            this.loadCart();
+          }
+        });
   }
 
-  // Removes an item completely from the cart
   removeFromCart(productId: number): void {
+    const currentItems = this.cartItems.getValue().filter(i => i.productId !== productId);
+    this.updateCartAndStorage(currentItems);
+
     this.http.delete(`${this.apiUrl}/${productId}`, { headers: this.getAuthHeaders() })
-      .subscribe(() => this.loadCart());
+      .subscribe({
+        error: (err) => {
+          console.error("Backend sync failed for removeFromCart:", err);
+          this.loadCart();
+        }
+      });
   }
 
-  // Clears the cart locally (used on logout)
   clearCart(): void {
     this.cartItems.next([]);
+    if (this.isBrowser) {
+      localStorage.removeItem('cart');
+    }
   }
 
-  // Gets the total number of items for the navbar badge
   getCartItemCount(): Observable<number> {
     return this.cartItems$.pipe(
       map(items => items.reduce((count, item) => count + item.quantity, 0))

@@ -1,63 +1,95 @@
-// In src/app/services/auth.service.ts
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core'; // <-- Import Inject, PLATFORM_ID
-import { isPlatformBrowser } from '@angular/common';            // <-- Import isPlatformBrowser
+import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { CartService } from './cart';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // NOTE: Your backend is likely running on HTTPS, not HTTP. Double-check this URL.
-  // It should probably be 'https://localhost:5026/api/auth'
-  private apiUrl = 'http://localhost:5026/api/auth';
-  
+  private apiUrl = 'http://localhost:5026/api/auth'; // Switched back to https for security
   private isBrowser: boolean;
 
-  // Inject PLATFORM_ID to determine the execution environment
+  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  isLoggedIn$ = this.loggedIn.asObservable();
+
+  private _cartService: CartService | undefined;
+
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private injector: Injector
   ) {
-    // This flag will be true only when the code is running in a browser
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
+  private get cartService(): CartService {
+    if (!this._cartService) {
+      this._cartService = this.injector.get(CartService);
+    }
+    return this._cartService;
+  }
+
+  private hasToken(): boolean {
+    if (this.isBrowser) {
+      return !!localStorage.getItem('authToken');
+    }
+    return false;
+  }
+
+  // As a User, I should be able to register on the application.
   register(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, userData);
   }
 
+  // As a User, I should be able to log in.
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/login`, credentials, { responseType: 'text' })
+      .pipe(
+        tap(token => {
+          this.saveToken(token);
+          this.loggedIn.next(true);
+          this.cartService.loadCart();
+        })
+      );
+  }
+
+  // As a User, I should be able to log out.
+  logout(): void {
+    if (this.isBrowser) {
+      localStorage.removeItem('authToken');
+      this.loggedIn.next(false);
+      this.cartService.clearCart();
+    }
   }
 
   saveToken(token: string): void {
-    // Only access localStorage if in the browser
     if (this.isBrowser) {
       localStorage.setItem('authToken', token);
     }
   }
 
   getToken(): string | null {
-    // Only access localStorage if in the browser
     if (this.isBrowser) {
       return localStorage.getItem('authToken');
     }
     return null;
   }
+  
+  // In src/app/services/auth.service.ts
 
   getUsername(): string | null {
-    if (!this.isBrowser) {
-      return null;
-    }
     const token = this.getToken();
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
-        // The username is stored in a 'claim'. The key for the name claim is typically
-        // 'unique_name' for .NET JWTs.
-        return decodedToken.unique_name || null;
+        
+        // Use bracket notation with the correct key from your token
+        return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || null;
+
       } catch (error) {
         console.error("Failed to decode token", error);
         return null;
@@ -67,15 +99,14 @@ export class AuthService {
   }
   
   getRole(): string | null {
-    if (!this.isBrowser) {
-      return null;
-    }
     const token = this.getToken();
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
-        // The role claim for .NET is typically 'role'
-        return decodedToken.role || null;
+
+        // Use bracket notation with the correct key from your token
+        return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
+        
       } catch (error) {
         console.error("Failed to decode token", error);
         return null;
@@ -84,15 +115,7 @@ export class AuthService {
     return null;
   }
 
-  logout(): void {
-    // Only access localStorage if in the browser
-    if (this.isBrowser) {
-      localStorage.removeItem('authToken');
-    }
-  }
-
   isLoggedIn(): boolean {
-    // This method is now safe because getToken() handles the platform check.
-    return !!this.getToken();
+    return this.loggedIn.getValue();
   }
 }
