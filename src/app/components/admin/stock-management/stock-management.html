@@ -1,0 +1,21 @@
+<div class="header">
+  <h2>Stock Management</h2>
+</div>
+<p>Showing products with stock less than or equal to {{ lowStockThreshold }}.</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Stock Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products" 
+        [ngClass]="{'low-stock': product.stockQuantity <= lowStockThreshold}">
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.stockQuantity }}</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,21 @@
+<div class="header">
+  <h2>Discount Coupons</h2>
+</div>
+<div class="coupon-form">
+  <h3>Create New Coupon</h3>
+  <form (ngSubmit)="createCoupon()">
+    <div class="form-group">
+      <label for="code">Coupon Code</label>
+      <input type="text" id="code" name="code" [(ngModel)]="newCoupon.code" required>
+    </div>
+    <div class="form-group">
+      <label for="discountAmount">Discount Amount (₹)</label>
+      <input type="number" id="discountAmount" name="discountAmount" [(ngModel)]="newCoupon.discountAmount" required>
+    </div>
+    <div class="form-group">
+      <label for="expirationDate">Expiration Date</label>
+      <input type="date" id="expirationDate" name="expirationDate" [(ngModel)]="newCoupon.expirationDate" required>
+    </div>
+    <button type="submit" class="btn-primary">Create Coupon</button>
+  </form>
+</div>

@@ -1,0 +1,52 @@
+<div class="header">
+  <h2>Product Management</h2>
+  <button class="btn-primary" (click)="openAddModal()">Add New Product</button>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products">
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.price | currency:'INR' }}</td>
+      <td>{{ product.stockQuantity }}</td>
+      <td>
+        <button class="btn-edit" (click)="openEditModal(product)">Edit</button>
+        <button class="btn-delete" (click)="deleteProduct(product.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>{{ isEditMode ? 'Edit Product' : 'Add New Product' }}</h3>
+    <form (ngSubmit)="saveProduct()">
+      <div class="form-group">
+        <label for="name">Product Name</label>
+        <input type="text" id="name" name="name" [(ngModel)]="currentProduct.name" required>
+      </div>
+      <div class="form-group">
+        <label for="price">Price (₹)</label>
+        <input type="number" id="price" name="price" [(ngModel)]="currentProduct.price" required>
+      </div>
+      <div class="form-group">
+        <label for="stock">Stock Quantity</label>
+        <input type="number" id="stock" name="stock" [(ngModel)]="currentProduct.stockQuantity" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
+        <button type="submit" class="btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

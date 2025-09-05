@@ -1,0 +1,28 @@
+<div class="header">
+  <h2>Sales Reports</h2>
+</div>
+<div class="report-form">
+  <div class="form-group">
+    <label for="startDate">Start Date</label>
+    <input type="date" id="startDate" [(ngModel)]="startDate">
+  </div>
+  <div class="form-group">
+    <label for="endDate">End Date</label>
+    <input type="date" id="endDate" [(ngModel)]="endDate">
+  </div>
+  <button class="btn-primary" (click)="generateReport()">Generate Report</button>
+</div>
+
+<div *ngIf="reportData" class="report-results">
+  <h3>Report for {{ reportData.startDate | date }} to {{ reportData.endDate | date }}</h3>
+  <div class="summary-cards">
+    <div class="card">
+      <h4>Total Sales</h4>
+      <p>{{ reportData.totalSales | currency:'INR' }}</p>
+    </div>
+    <div class="card">
+      <h4>Total Orders</h4>
+      <p>{{ reportData.totalOrders }}</p>
+    </div>
+  </div>
+</div>
