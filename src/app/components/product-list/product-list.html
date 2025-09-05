@@ -1,0 +1,28 @@
+<div class="product-page-container">
+  <h1>Our Products</h1>
+
+  <div class="filters">
+    <button (click)="filterByCategory('')" [class.active]="selectedCategory === ''">All</button>
+    <button *ngFor="let category of categories" 
+            (click)="filterByCategory(category.name)"
+            [class.active]="selectedCategory === category.name">
+      {{ category.name }}
+    </button>
+  </div>
+
+  <div class="product-grid" *ngIf="products.length > 0; else noProducts">
+    <div class="product-card" *ngFor="let product of products">
+      <img src="https://via.placeholder.com/300" alt="{{ product.name }}" class="product-image">
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-price">₹{{ product.price | number:'1.2-2' }}</p>
+        <p class="product-rating">Rating: {{ product.rating }} ★</p>
+        <button class="btn-add-to-cart" (click)="addToCart(product)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noProducts>
+    <p class="no-products-message">No products found for this category.</p>
+  </ng-template>
+</div>

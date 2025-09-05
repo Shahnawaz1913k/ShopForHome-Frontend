@@ -1,0 +1,32 @@
+<nav class="navbar" [class.navbar-scrolled]="isScrolled">
+  <div class="navbar-container">
+    <a class="navbar-brand" routerLink="/">
+      ShopForHome
+    </a>
+
+    <ul class="nav-links">
+      <li><a routerLink="/products">Products</a></li>
+
+      <ng-container *ngIf="!isLoggedIn()">
+        <li><a routerLink="/login">Login</a></li>
+        <li><a routerLink="/register">Register</a></li>
+      </ng-container>
+
+      <ng-container *ngIf="isLoggedIn()">
+
+        <li *ngIf="getRole() === 'Admin'">
+          <a routerLink="/admin">Admin Panel</a>
+        </li>
+        
+        <li>
+          <a (click)="logout()" class="logout-link">Logout</a>
+        </li>
+        <li>
+          <a routerLink="/cart">
+            Cart <span *ngIf="cartItemCount > 0" class="cart-badge">{{ cartItemCount }}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</nav>

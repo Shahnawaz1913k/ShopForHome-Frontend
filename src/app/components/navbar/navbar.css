@@ -1,0 +1,71 @@
+/* In src/app/components/navbar/navbar.component.css */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    z-index: 1000;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background-color: transparent;
+}
+
+.navbar-scrolled {
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-links a:hover {
+    color: #cb7c21;
+}
+
+.logout-link {
+    cursor: pointer;
+}
+
+/* In src/app/components/navbar/navbar.component.css */
+.greeting-text {
+  color: #555;
+  align-self: center; /* Vertically align with other nav items */
+  font-weight: 500;
+}
+
+.cart-badge {
+  background-color: #e53935; /* Red color */
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  vertical-align: top;
+  margin-left: 4px;
+}

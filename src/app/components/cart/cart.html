@@ -1,0 +1,49 @@
+<div class="cart-container">
+  <h1>Your Shopping Cart</h1>
+
+  <div *ngIf="(cartItems$ | async) as items; else emptyCart">
+    <div *ngIf="items.length > 0; else emptyCart">
+      
+      <div class="cart-item-header">
+        <div class="header-product">Product</div>
+        <div class="header-quantity">Quantity</div>
+        <div class="header-subtotal">Subtotal</div>
+        <div class="header-remove"></div>
+      </div>
+      
+      <div class="cart-item" *ngFor="let item of items">
+        <div class="item-product">
+          <img src="https://via.placeholder.com/100" alt="{{ item.productName }}" class="item-image">
+          <div class="item-details">
+            <h3 class="item-name">{{ item.productName }}</h3>
+            <p class="item-price">₹{{ item.price | number:'1.2-2' }}</p>
+          </div>
+        </div>
+        
+        <div class="item-quantity">
+          <button (click)="decreaseQuantity(item)">-</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="increaseQuantity(item)">+</button>
+        </div>
+
+        <p class="item-subtotal">₹{{ (item.price * item.quantity) | number:'1.2-2' }}</p>
+        
+        <div class="item-remove">
+          <button class="btn-remove" (click)="removeItem(item)">×</button>
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <h2>Total: {{ (cartTotal$ | async) | currency:'INR' }}</h2>
+        <button class="btn-checkout">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      <p>Your cart is empty.</p>
+      <a routerLink="/products" class="btn-shop">Start Shopping</a>
+    </div>
+  </ng-template>
+</div>

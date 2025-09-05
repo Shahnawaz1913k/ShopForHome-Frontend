@@ -1,0 +1,96 @@
+/* This will style the background of the page where the component is rendered */
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main form container with a card-like appearance */
+.form-container {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Styling for the "Login" title */
+h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Spacing for each label-input group */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Styling for labels */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
+}
+
+/* Styling for text and password input fields */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Visual feedback when an input is focused (clicked on) */
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #cb7c21; /* Use brand color for focus */
+    box-shadow: 0 0 5px rgba(203, 124, 33, 0.3);
+}
+
+/* Styling for the main login button */
+button[type="submit"] {
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #cb7c21; /* Your requested brand color */
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Darker shade for the button on hover for interactivity */
+button[type="submit"]:hover {
+    background-color: #b06815;
+}
+
+/* --- Example for Link Styling --- */
+/* If you add links inside your form, this will style them */
+.extra-links {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.extra-links a {
+    color: #cb7c21; /* Your requested brand color */
+    text-decoration: none;
+    transition: text-decoration 0.2s;
+}
+
+.extra-links a:hover {
+    text-decoration: underline;
+}
