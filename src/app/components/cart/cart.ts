@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart';
-import { Observable, map } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { UiService } from '../../services/ui'; // <-- Import UiService
 
 @Component({
   selector: 'app-cart',
@@ -12,28 +12,25 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./cart.css']
 })
 export class CartComponent {
-  // Expose the observable directly to the template
-  cartItems$: Observable<any[]>;
-  cartTotal$: Observable<number>;
+  cartItems;
+  cartTotal: Signal<number>;
 
-  constructor(private cartService: CartService) {
-    this.cartItems$ = this.cartService.cartItems$;
-
-    // Calculate the total price reactively
-    this.cartTotal$ = this.cartItems$.pipe(
-      map(items => items.reduce((sum, item) => sum + (item.price * item.quantity), 0))
+  constructor(
+    private cartService: CartService,
+    private uiService: UiService // <-- Inject UiService
+  ) {
+    this.cartItems = this.cartService.items;
+    this.cartTotal = computed(() => 
+      this.cartItems().reduce((sum, item) => sum + (item.price * item.quantity), 0)
     );
   }
 
-  increaseQuantity(item: any): void {
-    this.cartService.updateQuantity(item.productId, item.quantity + 1);
+  // Method to close the panel
+  closePanel(): void {
+    this.uiService.closeCartPanel();
   }
 
-  decreaseQuantity(item: any): void {
-    this.cartService.updateQuantity(item.productId, item.quantity - 1);
-  }
-
-  removeItem(item: any): void {
-    this.cartService.removeFromCart(item.productId);
-  }
+  increaseQuantity(item: any): void { this.cartService.updateQuantity(item.productId, item.quantity + 1); }
+  decreaseQuantity(item: any): void { this.cartService.updateQuantity(item.productId, item.quantity - 1); }
+  removeItem(item: any): void { this.cartService.removeFromCart(item.productId); }
 }

@@ -1,6 +1,24 @@
 <div class="header">
   <h2>Product Management</h2>
-  <button class="btn-primary" (click)="openAddModal()">Add New Product</button>
+  <div class="header-actions">
+    <button class="btn-secondary" (click)="openCategoryModal()">Manage Categories</button>
+    <button class="btn-primary" (click)="openAddModal()">Add New Product</button>
+  </div>
+</div>
+
+<div class="bulk-upload-section">
+  <h4>Bulk Upload Products</h4>
+  <p>Select a category, then upload a CSV file with headers: Name,Description,Price,Rating,StockQuantity</p>
+  <div class="upload-controls">
+    <select name="bulkCategory" [ngModel]="bulkUploadCategoryId()" (ngModelChange)="bulkUploadCategoryId.set($event)">
+      <option [ngValue]="null" disabled>Select a category...</option>
+      <option *ngFor="let category of categories()" [value]="category.id">
+        {{ category.name }}
+      </option>
+    </select>
+    <input type="file" (change)="onFileSelected($event)" accept=".csv">
+    <button class="btn-primary" (click)="onUpload()" [disabled]="!selectedFile() || !bulkUploadCategoryId()">Upload CSV</button>
+  </div>
 </div>
 
 <table class="data-table">
@@ -14,7 +32,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let product of products">
+    <tr *ngFor="let product of products()">
       <td>{{ product.id }}</td>
       <td>{{ product.name }}</td>
       <td>{{ product.price | currency:'INR' }}</td>
@@ -27,26 +45,51 @@
   </tbody>
 </table>
 
-<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+<div class="modal-overlay" *ngIf="isProductModalOpen()" (click)="closeProductModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h3>{{ isEditMode ? 'Edit Product' : 'Add New Product' }}</h3>
+    <h3>{{ isEditMode() ? 'Edit Product' : 'Add New Product' }}</h3>
     <form (ngSubmit)="saveProduct()">
       <div class="form-group">
         <label for="name">Product Name</label>
-        <input type="text" id="name" name="name" [(ngModel)]="currentProduct.name" required>
-      </div>
-      <div class="form-group">
-        <label for="price">Price (₹)</label>
-        <input type="number" id="price" name="price" [(ngModel)]="currentProduct.price" required>
+        <input type="text" id="name" name="name" [ngModel]="currentProduct().name" (ngModelChange)="updateCurrentProduct('name', $event)" required>
       </div>
       <div class="form-group">
         <label for="stock">Stock Quantity</label>
-        <input type="number" id="stock" name="stock" [(ngModel)]="currentProduct.stockQuantity" required>
+        <input type="number" id="stock" name="stock" [ngModel]="currentProduct().stockQuantity" (ngModelChange)="updateCurrentProduct('stockQuantity', $event)" required>
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" [ngModel]="currentProduct().categoryId" (ngModelChange)="updateCurrentProduct('categoryId', $event)" required>
+          <option *ngFor="let category of categories()" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
       </div>
       <div class="modal-actions">
-        <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
+        <button type="button" class="btn-secondary" (click)="closeProductModal()">Cancel</button>
         <button type="submit" class="btn-primary">Save</button>
       </div>
     </form>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="isCategoryModalOpen()" (click)="closeCategoryModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Manage Categories</h3>
+    <div class="category-list">
+      <div class="category-item" *ngFor="let category of categories()">
+        <span>{{ category.name }}</span>
+        <button class="btn-delete-sm" (click)="onDeleteCategory(category.id)">Delete</button>
+      </div>
+    </div>
+    <hr>
+    <h4>Add New Category</h4>
+    <form (ngSubmit)="onAddCategory()" class="add-category-form">
+      <input type="text" placeholder="New category name" name="newCategory" [ngModel]="newCategoryName()" (ngModelChange)="newCategoryName.set($event)" required>
+      <button type="submit" class="btn-primary">Add</button>
+    </form>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" (click)="closeCategoryModal()">Close</button>
+    </div>
   </div>
 </div>

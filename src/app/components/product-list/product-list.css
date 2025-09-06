@@ -5,73 +5,109 @@
     padding: 0 1rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-h1 { text-align: center; margin-bottom: 2rem; color: #333; }
-.filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
-.filters button { padding: 0.5rem 1.5rem; border: 1px solid #ddd; background-color: #fff; border-radius: 20px; cursor: pointer; transition: background-color 0.2s; font-size: 1rem; }
-.filters button:hover { background-color: #f0f0f0; }
-.filters button.active { background-color: #cb7c21; color: white; border-color: #cb7c21; }
 
-/* --- THE CORRECT LAYOUT LOGIC --- */
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.filters button {
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+}
+
+.filters button:hover {
+    background-color: #f0f0f0;
+}
+
+.filters button.active {
+    background-color: #cb7c21;
+    color: white;
+    border-color: #cb7c21;
+}
+
+/* --- MODIFIED LAYOUT LOGIC STARTS HERE --- */
 
 /* 1. The Parent Grid Container */
-/* This container is responsible for the layout: columns and spacing. */
 .product-grid {
     display: grid;
-    /* This creates a responsive grid of columns, each at least 250px wide. */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    /* This creates the space BETWEEN the cards. */
-    gap: 1.5rem; 
+    /* MODIFIED: Reduced min-width to 220px to make cards narrower */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
 }
 
 /* 2. The Child Product Card */
-/* This card is ONLY responsible for its own appearance and internal content. */
 .product-card {
     border: 1px solid #eee;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     background-color: white;
-    /* 'display: flex' is for arranging the content INSIDE the card (image, text, button). */
-    display: flex; 
+    display: flex;
     flex-direction: column;
-    /* NOTE: We have removed 'display: inline-block' and 'width: 20%' */
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Internal Card Content (No Change) --- */
+/* 3. Internal Card Content */
 
+/* MODIFIED: Increased height to 250px to make the card taller */
 .product-image {
     width: 100%;
-    height: 200px;
+    height: 250px;
     object-fit: cover;
 }
+
+/* MODIFIED: Reduced padding for a more compact feel */
 .product-info {
-    padding: 1rem;
+    padding: 0.75rem;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; 
+    flex-grow: 1;
 }
+
+/* MODIFIED: Reduced font size */
 .product-name {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin: 0 0 0.5rem 0;
     color: #333;
     flex-grow: 1;
 }
+
+/* MODIFIED: Reduced font size */
 .product-price {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: #000;
     margin: 0 0 0.5rem 0;
 }
+
+/* MODIFIED: Reduced font size */
 .product-rating {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #666;
     margin: 0 0 1rem 0;
 }
+
+/* MODIFIED: Slightly smaller font for the button */
 .btn-add-to-cart {
     width: 100%;
     padding: 0.65rem;
@@ -79,15 +115,17 @@ h1 { text-align: center; margin-bottom: 2rem; color: #333; }
     border-radius: 5px;
     background-color: #cb7c21;
     color: white;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
     margin-top: auto;
 }
+
 .btn-add-to-cart:hover {
     background-color: #b06815;
 }
+
 .no-products-message {
     text-align: center;
     font-size: 1.2rem;

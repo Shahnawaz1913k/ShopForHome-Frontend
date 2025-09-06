@@ -47,7 +47,8 @@ input[type="password"] {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    box-sizing: border-box;
+    /* Ensures padding doesn't affect width */
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -55,7 +56,8 @@ input[type="password"] {
 input[type="text"]:focus,
 input[type="password"]:focus {
     outline: none;
-    border-color: #cb7c21; /* Use brand color for focus */
+    border-color: #cb7c21;
+    /* Use brand color for focus */
     box-shadow: 0 0 5px rgba(203, 124, 33, 0.3);
 }
 
@@ -65,7 +67,8 @@ button[type="submit"] {
     padding: 0.85rem;
     border: none;
     border-radius: 5px;
-    background-color: #cb7c21; /* Your requested brand color */
+    background-color: #cb7c21;
+    /* Your requested brand color */
     color: white;
     font-size: 1.1rem;
     font-weight: bold;
@@ -86,11 +89,63 @@ button[type="submit"]:hover {
 }
 
 .extra-links a {
-    color: #cb7c21; /* Your requested brand color */
+    color: #cb7c21;
+    /* Your requested brand color */
     text-decoration: none;
     transition: text-decoration 0.2s;
 }
 
 .extra-links a:hover {
     text-decoration: underline;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #cb7c21;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    /* This helps center the spinner inside the button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    /* Give the button a fixed height */
+}
+
+.btn-login:hover:not(:disabled) {
+    background-color: #b06815;
+}
+
+.btn-login:disabled {
+    background-color: #a08262;
+    cursor: not-allowed;
+}
+
+/* The new, smaller spinner for the button */
+.button-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    /* Light circle */
+    border-top: 3px solid #ffffff;
+    /* White spinning part */
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* The spinning animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

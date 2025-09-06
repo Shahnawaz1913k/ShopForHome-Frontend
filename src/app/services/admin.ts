@@ -12,6 +12,7 @@ export class AdminService {
   private productsApiUrl = 'http://localhost:5026/api/Products';
   private reportsApiUrl = 'http://localhost:5026/api/SalesReports';
   private couponsApiUrl = 'http://localhost:5026/api/Coupons';
+  private categoriesApiUrl = 'http://localhost:5026/api/Categories';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -83,4 +84,31 @@ export class AdminService {
   assignCoupon(assignment: { couponCode: string, userIds: number[] }): Observable<any> {
     return this.http.post(`${this.couponsApiUrl}/assign`, assignment, { headers: this.getAuthHeaders() });
   }
+  bulkUploadProducts(file: File, categoryId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('categoryId', categoryId.toString());
+
+    // For file uploads, we only need the Authorization header, not Content-Type
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.post(`${this.productsApiUrl}/bulk-upload`, formData, { 
+      headers: headers 
+    });
+  }
+  // --- Category Methods ---
+  getCategories(): Observable<any[]> {
+    // This can be public, so no auth header needed
+    return this.http.get<any[]>(this.categoriesApiUrl);
+  }
+
+  addCategory(category: { name: string }): Observable<any> {
+    return this.http.post(this.categoriesApiUrl, category, { headers: this.getAuthHeaders() });
+  }
+
+  deleteCategory(id: number): Observable<any> {
+    return this.http.delete(`${this.categoriesApiUrl}/${id}`, { headers: this.getAuthHeaders() });
+  }
+
 }

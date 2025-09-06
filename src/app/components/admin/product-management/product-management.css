@@ -119,3 +119,82 @@ select {
     border-radius: 6px;
     cursor: pointer;
 }
+
+/* Add these styles to the existing file */
+.bulk-upload-section {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.bulk-upload-section h4 {
+    margin: 0 0 0.5rem 0;
+}
+
+.bulk-upload-section p {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.upload-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-secondary:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Add these to product-management.component.css */
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.category-list {
+    margin-bottom: 1.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-delete-sm {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-category-form {
+    display: flex;
+    gap: 1rem;
+}
+
+.add-category-form input {
+    flex-grow: 1;
+}

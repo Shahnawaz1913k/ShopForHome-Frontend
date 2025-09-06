@@ -1,0 +1,185 @@
+/* Hero Banner Styles */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1618220179428-22790b461013?w=1200');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 6rem 1rem;
+    border-radius: 8px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.btn-primary {
+    padding: 0.8rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #cb7c21;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #b06815;
+}
+
+/* Featured Products Section Styles */
+.featured-products {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.featured-products h2 {
+    
+    font-size: 2.2rem; /* Slightly larger font */
+    font-weight: 600; /* A bit less bold for a cleaner look */
+    color: #333;
+    text-transform: uppercase; /* CAPITALIZES THE TEXT */
+    letter-spacing: 2px; /* Adds space between letters */
+    margin-bottom: 1rem;
+    padding-bottom: 1rem; /* Adds space for the underline */
+    position: relative; /* Needed for the pseudo-element below */
+    display: inline-block; /* Ensures the underline is only as wide as needed */
+    
+}
+
+/* This creates the decorative accent underline */
+.featured-products h2::after {
+    content: '';
+    display: block;
+    width: 80px; /* Width of the underline */
+    height: 4px;  /* Thickness of the underline */
+    background-color: #cb7c21; /* Your brand color */
+    border-radius: 2px;
+    /* Centers the line horizontally below the heading */
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* "See More" Button Styles */
+.see-more-container {
+    text-align: center;
+    margin-top: 2.5rem;
+}
+
+.btn-secondary {
+    padding: 0.8rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #cb7c21;
+    background-color: transparent;
+    border: 2px solid #cb7c21;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #cb7c21;
+    color: white;
+}
+.product-grid {
+    display: grid;
+    /* MODIFIED: Reduced min-width to 220px to make cards narrower */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-left: 8%;
+    margin-right: 8%;
+}
+
+/* 2. The Child Product Card */
+.product-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 3. Internal Card Content */
+
+/* MODIFIED: Increased height to 250px to make the card taller */
+.product-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* MODIFIED: Reduced padding for a more compact feel */
+.product-info {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* MODIFIED: Reduced font size */
+.product-name {
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    flex-grow: 1;
+}
+
+/* MODIFIED: Reduced font size */
+.product-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+    margin: 0 0 0.5rem 0;
+}
+
+/* MODIFIED: Reduced font size */
+.product-rating {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0 0 1rem 0;
+}
+
+/* MODIFIED: Slightly smaller font for the button */
+.btn-add-to-cart {
+    width: 100%;
+    padding: 0.65rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #cb7c21;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: auto;
+}
+
+.btn-add-to-cart:hover {
+    background-color: #b06815;
+}
+
+.no-products-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+    margin-top: 3rem;
+}

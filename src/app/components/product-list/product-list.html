@@ -2,17 +2,20 @@
   <h1>Our Products</h1>
 
   <div class="filters">
-    <button (click)="filterByCategory('')" [class.active]="selectedCategory === ''">All</button>
-    <button *ngFor="let category of categories" 
+    <button (click)="filterByCategory('')" [class.active]="selectedCategory() === ''">All</button>
+    <button *ngFor="let category of categories()" 
             (click)="filterByCategory(category.name)"
-            [class.active]="selectedCategory === category.name">
+            [class.active]="selectedCategory() === category.name">
       {{ category.name }}
     </button>
   </div>
 
-  <div class="product-grid" *ngIf="products.length > 0; else noProducts">
-    <div class="product-card" *ngFor="let product of products">
-      <img src="https://via.placeholder.com/300" alt="{{ product.name }}" class="product-image">
+  <div class="product-grid" *ngIf="products().length > 0; else noProducts">
+    <div class="product-card" *ngFor="let product of products()">
+      <div class="product-image-container">
+        <img [src]="getProductImageUrl(product)" alt="{{ product.name }}" class="product-image">
+        <button class="wishlist-btn" (click)="addToWishlist(product)">❤</button>
+      </div>
       <div class="product-info">
         <h3 class="product-name">{{ product.name }}</h3>
         <p class="product-price">₹{{ product.price | number:'1.2-2' }}</p>

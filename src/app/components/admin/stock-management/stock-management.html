@@ -17,5 +17,37 @@
       <td>{{ product.name }}</td>
       <td>{{ product.stockQuantity }}</td>
     </tr>
+  </tbody><div class="header">
+  <h2>Stock Management</h2>
+</div>
+
+<div *ngIf="lowStockProducts.length > 0" class="notification-warning">
+  <h4>Low Stock Warning!</h4>
+  <p>The following products have a stock level below {{ lowStockThreshold }}:</p>
+  <ul>
+    <li *ngFor="let product of lowStockProducts">
+      <strong>{{ product.name }}</strong> (Current Stock: {{ product.stockQuantity }})
+    </li>
+  </ul>
+</div>
+
+<p>Showing all products. Items with stock less than {{ lowStockThreshold }} are highlighted.</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Stock Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products" 
+        [ngClass]="{'low-stock': product.stockQuantity < lowStockThreshold}">
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.stockQuantity }}</td>
+    </tr>
   </tbody>
+</table>
 </table>

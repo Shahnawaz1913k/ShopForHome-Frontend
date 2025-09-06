@@ -11,6 +11,7 @@ import { AdminService } from '../../../services/admin';
 })
 export class StockManagementComponent implements OnInit {
   products: any[] = [];
+  lowStockProducts: any[] = [];
   lowStockThreshold = 10;
 
   constructor(private adminService: AdminService) {}

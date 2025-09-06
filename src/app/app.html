@@ -1,5 +1,7 @@
 <app-navbar></app-navbar>
-
 <main class="main-content">
   <router-outlet></router-outlet>
 </main>
+<app-wishlist-panel *ngIf="(isWishlistPanelOpen$ | async)"></app-wishlist-panel>
+<app-cart *ngIf="(isCartPanelOpen$ | async)"></app-cart>
+<app-notification></app-notification>

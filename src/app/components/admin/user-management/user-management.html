@@ -9,7 +9,7 @@
     <span>Role</span>
     <span>Actions</span>
   </div>
-  <div class="user-item" *ngFor="let user of users">
+  <div class="user-item" *ngFor="let user of users()">
     <span>{{ user.username }}</span>
     <span>{{ user.role }}</span>
     <div class="actions">
@@ -19,21 +19,28 @@
   </div>
 </div>
 
-<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+<div class="modal-overlay" *ngIf="isModalOpen()" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h3>{{ isEditMode ? 'Edit User' : 'Add New User' }}</h3>
+    <h3>{{ isEditMode() ? 'Edit User' : 'Add New User' }}</h3>
     <form (ngSubmit)="saveUser()">
       <div class="form-group">
         <label for="username">Email / Username</label>
-        <input type="text" id="username" name="username" [(ngModel)]="currentUser.username" required>
+        <input type="text" id="username" name="username" 
+               [ngModel]="currentUser().username" 
+               (ngModelChange)="updateCurrentUser('username', $event)" required>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" [(ngModel)]="currentUser.password" [placeholder]="isEditMode ? 'Leave blank to keep current password' : ''">
+        <input type="password" id="password" name="password" 
+               [ngModel]="currentUser().password"
+               (ngModelChange)="updateCurrentUser('password', $event)"
+               [placeholder]="isEditMode() ? 'Leave blank to keep current' : ''">
       </div>
       <div class="form-group">
         <label for="role">Role</label>
-        <select id="role" name="role" [(ngModel)]="currentUser.role">
+        <select id="role" name="role" 
+                [ngModel]="currentUser().role"
+                (ngModelChange)="updateCurrentUser('role', $event)">
           <option value="User">User</option>
           <option value="Admin">Admin</option>
         </select>

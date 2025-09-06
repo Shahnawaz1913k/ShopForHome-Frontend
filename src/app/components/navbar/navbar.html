@@ -11,21 +11,21 @@
       </ng-container>
 
       <ng-container *ngIf="(isLoggedIn$ | async)">
-        <li class="greeting-text">
-          {{ greeting }}, {{ getUsername() }}
-        </li>
-        
-        <li *ngIf="getRole() === 'Admin'">
+
+        <li *ngIf="(userRole$ | async) === 'Admin'">
           <a routerLink="/admin">Admin Panel</a>
         </li>
-        
+
+        <li><a (click)="openWishlist()" style="cursor: pointer;">Wishlist</a></li>
+
         <li>
-          <a routerLink="/cart">
-            Cart 
-            <span *ngIf="(cartItemCount$ | async)! > 0" class="cart-badge">
-              {{ cartItemCount$ | async }}
-            </span>
+          <a (click)="openCartPanel()" style="cursor: pointer;">
+            Cart <span *ngIf="(cartItemCount$ | async)! > 0" class="cart-badge">{{ cartItemCount() }}</span>
           </a>
+        </li>
+
+        <li *ngIf="(username$ | async) as username" class="greeting-text">
+          {{ greeting }}, {{ username }}
         </li>
 
         <li>

@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // <-- Import FormsModule for the modal
+import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, FormsModule], // <-- Add FormsModule
+  imports: [CommonModule, FormsModule],
   templateUrl: './user-management.html',
   styleUrls: ['./user-management.css']
 })
 export class UserManagementComponent implements OnInit {
-  users: any[] = [];
-  isModalOpen = false;
-  isEditMode = false;
-  currentUser: any = {};
+  // Convert component state properties to signals
+  users = signal<any[]>([]);
+  isModalOpen = signal(false);
+  isEditMode = signal(false);
+  currentUser = signal<any>({});
 
   constructor(private adminService: AdminService) {}
 
@@ -24,40 +25,36 @@ export class UserManagementComponent implements OnInit {
 
   loadUsers(): void {
     this.adminService.getUsers().subscribe(data => {
-      this.users = data;
+      this.users.set(data); // Use .set() to update the signal's value
     });
   }
 
   openAddModal(): void {
-    this.isEditMode = false;
-    this.currentUser = { role: 'User' }; // Default values for a new user
-    this.isModalOpen = true;
+    this.isEditMode.set(false);
+    this.currentUser.set({ role: 'User' }); // Default values for a new user
+    this.isModalOpen.set(true);
   }
 
   openEditModal(user: any): void {
-    this.isEditMode = true;
+    this.isEditMode.set(true);
     // Create a copy to avoid modifying the list directly
-    this.currentUser = { ...user, password: '' }; // Clear password for security
-    this.isModalOpen = true;
+    this.currentUser.set({ ...user, password: '' }); // Clear password for security
+    this.isModalOpen.set(true);
   }
 
   closeModal(): void {
-    this.isModalOpen = false;
+    this.isModalOpen.set(false);
   }
 
   saveUser(): void {
-    if (this.isEditMode) {
-      // If the password field is empty, don't send it in the update
-      const userToUpdate = { ...this.currentUser };
-      if (!userToUpdate.password) {
-        delete userToUpdate.password;
-      }
-      this.adminService.updateUser(userToUpdate).subscribe(() => this.onSaveSuccess());
-    } else {
-      this.adminService.addUser(this.currentUser).subscribe(() => this.onSaveSuccess());
-    }
+    // Read the signal's value by calling it as a function: isEditMode() and currentUser()
+    const operation = this.isEditMode()
+      ? this.adminService.updateUser(this.currentUser())
+      : this.adminService.addUser(this.currentUser());
+      
+    operation.subscribe(() => this.onSaveSuccess());
   }
-
+  
   onSaveSuccess(): void {
     this.loadUsers();
     this.closeModal();
@@ -69,5 +66,11 @@ export class UserManagementComponent implements OnInit {
         this.loadUsers();
       });
     }
+  }
+
+  // Helper method to update a property on the currentUser signal
+  // This is needed for two-way binding in the template
+  updateCurrentUser(property: string, value: any): void {
+    this.currentUser.update(user => ({ ...user, [property]: value }));
   }
 }

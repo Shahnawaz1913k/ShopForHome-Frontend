@@ -2,7 +2,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    /* The host covers the full screen to capture clicks on the overlay */
     width: 100%;
     height: 100%;
     z-index: 1040;
@@ -15,37 +14,18 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* --- KEY CHANGES ARE HERE --- */
-.cart-panel {
+.wishlist-panel {
     position: absolute;
     top: 0;
     right: 0;
-    /* Changed from 'left: 0' */
     width: 100%;
     max-width: 400px;
     height: 100%;
     background-color: white;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-    /* Shadow is now on the left */
     display: flex;
     flex-direction: column;
-    animation: slideInFromRight 0.3s ease-out;
-    /* Optional: Add a slide-in animation */
 }
-
-/* Optional: Keyframes for the slide-in animation */
-@keyframes slideInFromRight {
-    from {
-        transform: translateX(100%);
-    }
-
-    to {
-        transform: translateX(0);
-    }
-}
-
-/* --- END OF KEY CHANGES --- */
-
 
 .panel-header {
     display: flex;
@@ -70,10 +50,9 @@
 .panel-body {
     padding: 1.5rem;
     overflow-y: auto;
-    flex-grow: 1;
 }
 
-.cart-item {
+.wishlist-item {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
@@ -96,67 +75,31 @@
 
 .item-price {
     margin: 0;
-    color: #555;
-}
-
-.item-quantity {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.item-quantity button {
-    width: 25px;
-    height: 25px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    cursor: pointer;
 }
 
 .item-actions {
-    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.item-subtotal {
-    font-weight: bold;
+.btn-action,
+.btn-remove {
+    font-size: xx-small;
+    background: none;
+    border: 1px solid #ccc;
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
 .btn-remove {
-    background: none;
-    border: none;
     color: #dc3545;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 0.8rem;
+    border-color: #dc3545;
 }
 
 .empty-message {
     text-align: center;
     color: #888;
     margin-top: 2rem;
-}
-
-.panel-footer {
-    padding: 1.5rem;
-    border-top: 2px solid #eee;
-}
-
-.total-section {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-.btn-checkout {
-    width: 100%;
-    padding: 0.8rem;
-    font-size: 1.1rem;
-    color: #fff;
-    background-color: #cb7c21;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
